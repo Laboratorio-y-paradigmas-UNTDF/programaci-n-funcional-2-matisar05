@@ -3,15 +3,21 @@
 
 // Compone funciones de izquierda a derecha. Sin funciones → identidad.
 export function pipe<T>(...fns: Array<(x: T) => T>): (x: T) => T {
-  throw new Error("TODO: implementar");
+  return (initialValue:T)=> fns.reduce((acc,fn)=> fn(acc), initialValue);
 }
 
 // Compone funciones de derecha a izquierda. Sin funciones → identidad.
 export function compose<T>(...fns: Array<(x: T) => T>): (x: T) => T {
-  throw new Error("TODO: implementar");
+  return (initialValue:T)=> fns.reduce((acc,fn)=> fn(acc), initialValue);
 }
 
 // Pipeline que aplica trim, toLowerCase, y agrega @empresa.com si no tiene @.
 export function normalizeEmail(raw: string): string {
-  throw new Error("TODO: implementar con pipe");
+  const trim = (s:string ) => s.trim();
+  const toLower = (s:string) => s.toLowerCase();
+  const addDomain = (s:string) => s.includes('@') ? s : `${s}@`;
+
+  const pipeline = pipe(trim, toLower, addDomain);
+
+  return pipeline(raw);
 }

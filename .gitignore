@@ -1,0 +1,13 @@
+# TypeScript
+typescript/node_modules/
+typescript/dist/
+
+# Clojure
+clojure/target/
+clojure/.lein-repl-history
+clojure/.nrepl-port
+clojure/.cpcache/
+
+# OS
+.DS_Store
+Thumbs.db
