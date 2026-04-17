@@ -16,7 +16,9 @@ export function rolesUnicos(users: UserWithRoles[]): string[] {
 
 // Construye diccionario id → nombre con reduce.
 export function indexarPorId(items: { id: number; nombre: string }[]): Record<number, string> {
-  return items.reduce((acc,item) =>{
+  return items
+  .reduce((acc,item) =>
+  {
     acc[item.id] = item.nombre;
     return acc;
   }, {} as Record <number,string>)
