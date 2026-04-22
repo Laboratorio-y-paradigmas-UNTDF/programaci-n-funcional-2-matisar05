@@ -13,12 +13,21 @@ export type Result<T, E> = { status: "ok"; value: T } | { status: "error"; error
 
 // ok si activa Y total > 100. err("orden inactiva") o err("monto insuficiente").
 export function clasificarOrden(o: Orden): Result<Orden, string> {
-  throw new Error("TODO: implementar");
+  if (!o.activa) {
+    return { status: "error", error: "orden inactiva" };
+  }
+  if (o.total <= 100) {
+    return { status: "error", error: "monto insuficiente" };
+  }
+  return { status: "ok", value: o };
 }
 
 // Partial: retorna fn que crea nueva orden con total reducido por porcentaje.
 export function aplicarDescuento(porcentaje: number): (o: Orden) => Orden {
-  throw new Error("TODO: implementar");
+  return (o: Orden) => ({
+    ...o,
+    total: o.total * (1 - porcentaje),
+  });
 }
 
 // Pipeline: clasificar → separar ok/err → descuento 10% a aprobadas → sumar totales.
@@ -27,5 +36,11 @@ export function procesarOrdenes(ordenes: Orden[]): {
   rechazadas: string[];
   totalFinal: number;
 } {
-  throw new Error("TODO: implementar");
+  const diezPorCiento = aplicarDescuento(10);
+  const aprobadas = resultados
+    .filter((r): r is { status: 'ok', value: Orden } => r.status === 'ok')
+    .map(r => diezPorCiento(r.value));
+  const rechazadas = resultados
+    .filter((r): r is { status: 'error', error: string } => r.status === 'error')
+    .map(r => r.error)
 }

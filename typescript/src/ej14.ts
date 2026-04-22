@@ -3,12 +3,20 @@
 
 // Memoize genérico para funciones de 1 argumento. Usa Map como cache.
 export function memoize<T, R>(fn: (arg: T) => R): (arg: T) => R {
-  throw new Error("TODO: implementar");
+  return (arg: T): R => {
+    if (caches.has(arg)) {
+      return caches.get(arg)!;
+    }
+    const result = fn(arg)
+    caches.set(arg, result)
+    return result;
+  }
 }
 
 // Fibonacci recursivo clásico (sin memo).
 export function fibonacci(n: number): number {
-  throw new Error("TODO: implementar");
+  if (n <= 1) return n;
+  return fibonacci(n - 1) + fibonacci(n - 2);
 }
 
 // Wrapper que cuenta llamadas. Retorna { call, count }.
@@ -16,5 +24,12 @@ export function callCounter<A extends unknown[], R>(fn: (...args: A) => R): {
   call: (...args: A) => R;
   count: () => number;
 } {
-  throw new Error("TODO: implementar");
+  let counter = 0;
+  return {
+    call: (...args: A) => {
+      counter++;
+      return fn(...args);
+    },
+    count: () => counter,
+  }
 }
