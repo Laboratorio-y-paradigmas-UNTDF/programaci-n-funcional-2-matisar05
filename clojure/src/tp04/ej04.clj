@@ -2,18 +2,18 @@
   "Ejercicio 4 — Pipeline con ->> (5 pts). Trazabilidad: F-08")
 
 ;; Filtra activas, extrae :total, suma.
-((defn total-activas [ordenes]
-  (->> ordenes 
-        (filter:activa?)
-        (map:total))
-        (reduce + 0)))
+(defn total-activas [ordenes]
+  (->> ordenes
+       (filter :activa?)
+       (map :total)
+       (reduce + 0)))
 
 ;; Filtra activas, devuelve vector de :cliente.
 (defn nombres-activas [ordenes]
   (->> ordenes
-        (filter:activa?)
-        (map:cliente)
-        (vec)))
+       (filter :activa?)
+       (map :cliente)
+       (vec)))
 
 ;; Filtra pares, eleva al cuadrado, suma.
 (defn cuadrados-pares [nums]
