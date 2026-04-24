@@ -26,7 +26,7 @@ export function clasificarOrden(o: Orden): Result<Orden, string> {
 export function aplicarDescuento(porcentaje: number): (o: Orden) => Orden {
   return (o: Orden) => ({
     ...o,
-    total: o.total * (1 - porcentaje),
+    total: o.total * (1 - porcentaje / 100),
   });
 }
 
@@ -36,11 +36,14 @@ export function procesarOrdenes(ordenes: Orden[]): {
   rechazadas: string[];
   totalFinal: number;
 } {
+  const resultados = ordenes.map(clasificarOrden);
   const diezPorCiento = aplicarDescuento(10);
   const aprobadas = resultados
-    .filter((r): r is { status: 'ok', value: Orden } => r.status === 'ok')
+    .filter((r): r is { status: 'ok'; value: Orden } => r.status === 'ok')
     .map(r => diezPorCiento(r.value));
   const rechazadas = resultados
-    .filter((r): r is { status: 'error', error: string } => r.status === 'error')
-    .map(r => r.error)
+    .filter((r): r is { status: 'error'; error: string } => r.status === 'error')
+    .map(r => r.error);
+  const totalFinal = aprobadas.reduce((acc, o) => acc + o.total, 0);
+  return { aprobadas, rechazadas, totalFinal };
 }

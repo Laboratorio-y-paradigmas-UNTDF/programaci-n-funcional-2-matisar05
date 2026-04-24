@@ -3,12 +3,13 @@
 
 // Memoize genérico para funciones de 1 argumento. Usa Map como cache.
 export function memoize<T, R>(fn: (arg: T) => R): (arg: T) => R {
+  const cache = new Map<T, R>();
   return (arg: T): R => {
-    if (caches.has(arg)) {
-      return caches.get(arg)!;
+    if (cache.has(arg)) {
+      return cache.get(arg)!;
     }
     const result = fn(arg)
-    caches.set(arg, result)
+    cache.set(arg, result)
     return result;
   }
 }
